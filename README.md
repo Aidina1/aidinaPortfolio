@@ -1,4 +1,4 @@
-# aiidinaPortfolio
+# aidinaPortfolio
 
 A responsive portfolio website built with HTML, CSS, and JavaScript as part of the Capstone project. Deployed using GitHub Pages.
 
