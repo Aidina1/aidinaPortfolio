@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Aidina's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        #contact {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>Aidina</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#projects">Projects</a></li>
+        </ul>
+    </nav>
+
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <p>Fill out the form below and I'll get back to you.</p>
+
+        <form id="contactForm">
+
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Your email">
+
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Your message" rows="5"></textarea>
+
+            <button type="button" onclick="validateForm()">Send Message</button>
+
+        </form>
+
+        <p id="formMessage"></p>
+
+    </section>
+
+    <footer>
+        <p>© 2026 Aidina. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function validateForm() {
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var message = document.getElementById('message').value;
+            var formMessage = document.getElementById('formMessage');
+
+            if (name == '' || email == '' || message == '') {
+                formMessage.style.color = 'red';
+                formMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            if (email.indexOf('@') == -1) {
+                formMessage.style.color = 'red';
+                formMessage.textContent = 'Please enter a valid email address.';
+                return;
+            }
+
+            formMessage.style.color = 'green';
+            formMessage.textContent = 'Message sent successfully!';
+
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+        }
+    </script>
+
+</body>
+</html>
