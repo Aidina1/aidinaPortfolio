@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Monitor – Aidina</title>
+  <meta name="theme-color" content="#2d3e50">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="healthmonitor.css">
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="#">💓 Health Monitor</a>
+  <a class="back" href="index.html">← Back to Portfolio</a>
+</nav>
+
+<div id="screen-lock" class="screen active">
+  <h2>🔒 Enter PIN</h2>
+  <p>Enter your 4-digit PIN to access your health data.</p>
+  <div class="pin-display">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+  <div class="numpad">
+    <button onclick="pinInput('1')">1</button>
+    <button onclick="pinInput('2')">2</button>
+    <button onclick="pinInput('3')">3</button>
+    <button onclick="pinInput('4')">4</button>
+    <button onclick="pinInput('5')">5</button>
+    <button onclick="pinInput('6')">6</button>
+    <button onclick="pinInput('7')">7</button>
+    <button onclick="pinInput('8')">8</button>
+    <button onclick="pinInput('9')">9</button>
+    <button class="btn-clear" onclick="pinClear()">CLR</button>
+    <button onclick="pinInput('0')">0</button>
+    <button class="btn-del" onclick="pinDel()">&#9003;</button>
+  </div>
+  <div id="pin-error"></div>
+  <div id="change-pin-hint" onclick="changePin()">Change PIN (first run: 1234)</div>
+</div>
+
+<div id="screen-disclaimer" class="screen">
+  <h2>&#9888;&#65039; Medical Disclaimer</h2>
+  <div class="disclaimer-box">
+    <p><strong>This app is for personal tracking only.</strong></p><br>
+    <p>The information recorded and displayed in this app is <strong>not</strong> medical advice and should
+    not replace consultation with a qualified healthcare professional. Always seek the guidance of your
+    doctor or other qualified health provider with any questions you may have regarding a medical condition.</p><br>
+    <p>By continuing, you confirm that you understand and accept these terms.</p>
+  </div>
+  <button class="btn btn-primary" onclick="showScreen('screen-menu')">I Accept &#8211; Continue</button>
+</div>
+
+<div id="screen-menu" class="screen">
+  <h2>Main Menu</h2>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="showScreen('screen-profile')">
+      <div class="icon">&#128100;</div>
+      <span>User Info</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-add')">
+      <div class="icon">&#10133;</div>
+      <span>Add Record</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-history')">
+      <div class="icon">&#128203;</div>
+      <span>Record History</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-analyze')">
+      <div class="icon">&#128202;</div>
+      <span>Analyze Data</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-advice')">
+      <div class="icon">&#128161;</div>
+      <span>Get Advice</span>
+    </div>
+    <div class="menu-card" onclick="lockApp()">
+      <div class="icon">&#128274;</div>
+      <span>Lock App</span>
+    </div>
+  </div>
+</div>
+
+<div id="screen-profile" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('screen-menu')">&larr; Menu</button>
+    <h2>User Info</h2>
+  </div>
+  <div class="form-group">
+    <label>Full Name</label>
+    <input id="p-name" type="text" placeholder="Jane Doe">
+  </div>
+  <div class="form-group">
+    <label>Date of Birth</label>
+    <input id="p-dob" type="date">
+  </div>
+  <div class="form-group">
+    <label>Health Card #</label>
+    <input id="p-hcn" type="text" placeholder="1234 567 890 AB">
+  </div>
+  <div class="form-group">
+    <label>Health Indicator to Track</label>
+    <select id="p-indicator">
+      <option value="bp">Blood Pressure (mmHg)</option>
+      <option value="glucose">Blood Glucose (mmol/L)</option>
+      <option value="hr">Heart Rate (bpm)</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+</div>
+
+<div id="screen-add" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('screen-menu')">&larr; Menu</button>
+    <h2>Add New Record</h2>
+  </div>
+  <div id="add-fields"></div>
+  <div class="form-group">
+    <label>Date</label>
+    <input id="r-date" type="date">
+  </div>
+  <div class="form-group">
+    <label>Notes</label>
+    <input id="r-notes" type="text" placeholder="Optional notes...">
+  </div>
+  <button class="btn btn-primary" onclick="saveRecord()">Save Record</button>
+</div>
+
+<div id="screen-history" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('screen-menu')">&larr; Menu</button>
+    <h2>Record History</h2>
+  </div>
+  <div style="display:flex; gap:.75rem; margin-bottom:1rem; align-items:center;">
+    <select id="sort-select" onchange="renderHistory()"
+            style="flex:1; padding:.5rem; border:1px solid var(--border); border-radius:6px; font-size:.9rem;">
+      <option value="desc">Newest First</option>
+      <option value="asc">Oldest First</option>
+    </select>
+    <button class="btn btn-danger btn-sm" onclick="clearHistory()">Clear All</button>
+  </div>
+  <div class="card-wrap">
+    <div id="history-table-wrap"></div>
+  </div>
+</div>
+
+<div id="screen-analyze" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('screen-menu')">&larr; Menu</button>
+    <h2>Analyze Data</h2>
+  </div>
+  <canvas id="chart-canvas" width="600" height="260"></canvas>
+  <p style="text-align:center; font-size:.8rem; color:var(--muted); margin-top:.5rem;">
+    Values plotted over time
+  </p>
+</div>
+
+<div id="screen-advice" class="screen">
+  <div class="section-header">
+    <button class="back-btn" onclick="showScreen('screen-menu')">&larr; Menu</button>
+    <h2>Get Advice</h2>
+  </div>
+  <canvas id="gauge-canvas" width="300" height="170"></canvas>
+  <p class="gauge-label" id="gauge-val">&mdash;</p>
+  <div id="advice-text"></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="healthmonitor.js"></script>
+</body>
+</html>
